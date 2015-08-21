@@ -308,9 +308,10 @@ namespace IrcDotNet
 
             // Extract nick name, user name, and host name from welcome message. Use fallback info if not present.
             var nickNameIdMatch = Regex.Match(this.WelcomeMessage.Split(' ').Last(), regexNickNameId);
-            this.localUser.NickName = nickNameIdMatch.Groups["nick"].GetValue() ?? this.localUser.NickName;
-            this.localUser.UserName = nickNameIdMatch.Groups["user"].GetValue() ?? this.localUser.UserName;
-            this.localUser.HostName = nickNameIdMatch.Groups["host"].GetValue() ?? this.localUser.HostName;
+            var nickNameIdMatch2 = Regex.Match(message.Parameters[0], regexNickNameId);
+            this.localUser.NickName = nickNameIdMatch2.Groups["nick"].GetValue() ?? nickNameIdMatch.Groups["nick"].GetValue() ?? this.localUser.NickName;
+            this.localUser.UserName = nickNameIdMatch2.Groups["user"].GetValue() ?? nickNameIdMatch.Groups["user"].GetValue() ?? this.localUser.UserName;
+            this.localUser.HostName = nickNameIdMatch2.Groups["host"].GetValue() ?? nickNameIdMatch.Groups["host"].GetValue() ?? this.localUser.HostName;
 
             this.isRegistered = true;
             OnRegistered(new EventArgs());
